@@ -1,6 +1,10 @@
+import { useState } from "react";
+
 const TicketInfo = ({
   ticketSeleccionado,
 }) => {
+
+  const [mostrarInformacion, setMostrarInformacion] = useState(false);
 
   // ======================================
   // SIN TICKET SELECCIONADO
@@ -8,28 +12,18 @@ const TicketInfo = ({
 
   if (!ticketSeleccionado) {
     return (
-      <div
-        className="
-          bg-slate-800
-          rounded-2xl
-          border
-          border-slate-700
-          p-6
-        "
-      >
-        <h2 className="text-xl font-bold mb-5">
-          Información
-        </h2>
+      <div className="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden">
 
-        <div
-          className="
-            text-center
-            text-slate-400
-            py-10
-          "
-        >
+        <div className="p-5 border-b border-slate-700">
+          <h2 className="text-2xl font-bold text-white">
+            Información
+          </h2>
+        </div>
+
+        <div className="text-center text-slate-400 py-10">
           Selecciona un ticket.
         </div>
+
       </div>
     );
   }
@@ -39,98 +33,165 @@ const TicketInfo = ({
   // ======================================
 
   return (
-    <div
-      className="
-        bg-slate-800
-        rounded-2xl
-        border
-        border-slate-700
-        p-6
-      "
-    >
-      <h2 className="text-xl font-bold mb-5">
-        Información
-      </h2>
+    <div className="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden">
 
-      <div className="space-y-4">
+      {/* ======================================
+          BOTÓN DESPLEGABLE
+      ====================================== */}
 
-        <Info
-          titulo="Cliente"
-          valor={ticketSeleccionado.cliente}
-        />
+      <button
+        type="button"
+        onClick={() =>
+          setMostrarInformacion(!mostrarInformacion)
+        }
+        className="
+          w-full
+          flex
+          items-center
+          justify-between
+          p-5
+          text-left
+          hover:bg-slate-700
+          transition
+        "
+      >
 
-        <Info
-          titulo="Correo"
-          valor={ticketSeleccionado.correo}
-        />
+        <div className="flex items-center gap-3">
 
-        <Info
-          titulo="Teléfono"
-          valor={ticketSeleccionado.telefono}
-        />
+          <span className="text-2xl">
+            👤
+          </span>
 
-        <Info
-          titulo="Plan"
-          valor={ticketSeleccionado.plan}
-        />
+          <div>
 
-        <Info
-          titulo="Zona"
-          valor={ticketSeleccionado.zona}
-        />
+            <h2 className="text-xl font-bold text-white">
+              Información
+            </h2>
 
-        <Info
-          titulo="Asunto"
-          valor={ticketSeleccionado.asunto}
-        />
+            <p className="text-sm text-slate-400 mt-1">
+              {mostrarInformacion
+                ? "Ocultar información"
+                : "Ver información del ticket"}
+            </p>
 
-        <Info
-          titulo="Categoría"
-          valor={ticketSeleccionado.categoria}
-        />
+          </div>
 
-        <Info
-          titulo="Estado"
-          valor={ticketSeleccionado.estado}
-        />
+        </div>
 
-        <Info
-          titulo="Prioridad"
-          valor={ticketSeleccionado.prioridad}
-        />
+        {/* ICONO */}
 
-        <Info
-          titulo="Técnico"
-          valor={
-            ticketSeleccionado.tecnico ||
-            "Sin asignar"
-          }
-        />
+        <span
+          className="
+            text-2xl
+            text-slate-400
+            transition-transform
+            duration-300
+          "
+        >
+          {mostrarInformacion ? "⌃" : "⌄"}
+        </span>
 
-        <Info
-          titulo="Fecha"
-          valor={
-            ticketSeleccionado.fecha_creacion
-              ? new Date(
-                  ticketSeleccionado.fecha_creacion
-                ).toLocaleString("es-CO")
-              : "-"
-          }
-        />
+      </button>
 
-        <Info
-          titulo="Última actualización"
-          valor={
-            ticketSeleccionado.fecha_actualizacion
-              ? new Date(ticketSeleccionado.fecha_actualizacion).toLocaleString("es-CO")
-              : "-"
-          }
-        />
 
-      </div>
+      {/* ======================================
+          INFORMACIÓN DESPLEGABLE
+      ====================================== */}
+
+      {mostrarInformacion && (
+
+        <div
+          className="
+            border-t
+            border-slate-700
+            p-5
+            space-y-5
+          "
+        >
+
+          <Info
+            titulo="Cliente"
+            valor={ticketSeleccionado.cliente}
+          />
+
+          <Info
+            titulo="Correo"
+            valor={ticketSeleccionado.correo}
+          />
+
+          <Info
+            titulo="Teléfono"
+            valor={ticketSeleccionado.telefono}
+          />
+
+          <Info
+            titulo="Plan"
+            valor={ticketSeleccionado.plan}
+          />
+
+          <Info
+            titulo="Zona"
+            valor={ticketSeleccionado.zona}
+          />
+
+          <Info
+            titulo="Asunto"
+            valor={ticketSeleccionado.asunto}
+          />
+
+          <Info
+            titulo="Categoría"
+            valor={ticketSeleccionado.categoria}
+          />
+
+          <Info
+            titulo="Estado"
+            valor={ticketSeleccionado.estado}
+          />
+
+          <Info
+            titulo="Prioridad"
+            valor={ticketSeleccionado.prioridad}
+          />
+
+          <Info
+            titulo="Técnico"
+            valor={
+              ticketSeleccionado.tecnico ||
+              "Sin asignar"
+            }
+          />
+
+          <Info
+            titulo="Fecha"
+            valor={
+              ticketSeleccionado.fecha_creacion
+                ? new Date(
+                    ticketSeleccionado.fecha_creacion
+                  ).toLocaleString("es-CO")
+                : "-"
+            }
+          />
+
+          <Info
+            titulo="Última actualización"
+            valor={
+              ticketSeleccionado.fecha_actualizacion
+                ? new Date(
+                    ticketSeleccionado.fecha_actualizacion
+                  ).toLocaleString("es-CO")
+                : "-"
+            }
+          />
+
+        </div>
+
+      )}
+
     </div>
   );
 };
+
 
 // ======================================
 // COMPONENTE INFO
@@ -140,16 +201,21 @@ const Info = ({
   titulo,
   valor,
 }) => {
+
   return (
+
     <div>
-      <p className="text-slate-400 text-sm">
+
+      <p className="text-sm text-slate-400 mb-1">
         {titulo}
       </p>
 
-      <p className="font-semibold text-white">
+      <p className="font-semibold text-white break-words">
         {valor || "-"}
       </p>
+
     </div>
+
   );
 };
 

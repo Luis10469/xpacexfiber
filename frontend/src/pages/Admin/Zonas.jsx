@@ -5,14 +5,28 @@ import ZonaModal from "../../components/Zonas/ZonaModal";
 import ConfirmModal from "../../components/Modals/ConfirmModal";
 
 const Zonas = () => {
+  // ==========================
+  // DATOS
+  // ==========================
 
   const [zonas, setZonas] = useState([]);
 
-  const [mostrarModal, setMostrarModal] = useState(false);
-
-  const [modoEdicion, setModoEdicion] = useState(false);
+  // ==========================
+  // SELECCIÓN
+  // ==========================
 
   const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
+
+  // ==========================
+  // MODAL
+  // ==========================
+
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [modoEdicion, setModoEdicion] = useState(false);
+
+  // ==========================
+  // FORMULARIO
+  // ==========================
 
   const [formulario, setFormulario] = useState({
     nombre: "",
@@ -20,35 +34,37 @@ const Zonas = () => {
     estado: 1,
   });
 
+  // ==========================
+  // BUSQUEDA
+  // ==========================
+
   const [busqueda, setBusqueda] = useState("");
+
+  // ==========================
+  // CONFIRMACIÓN ELIMINAR
+  // ==========================
+
   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
   const [zonaAEliminar, setZonaAEliminar] = useState(null);
+
   // ==========================
   // CARGAR ZONAS
   // ==========================
 
   const cargarZonas = async () => {
-
     try {
-
       const { data } = await api.get("/zonas");
 
       setZonas(data);
-
     } catch (error) {
-
       console.error(error);
 
       toast.error("No se pudieron cargar las zonas.");
-
     }
-
   };
 
   useEffect(() => {
-
     cargarZonas();
-
   }, []);
 
   // ==========================
@@ -56,9 +72,7 @@ const Zonas = () => {
   // ==========================
 
   const abrirNuevaZona = () => {
-
     setModoEdicion(false);
-
     setZonaSeleccionada(null);
 
     setFormulario({
@@ -68,345 +82,659 @@ const Zonas = () => {
     });
 
     setMostrarModal(true);
-
   };
 
   // ==========================
-  // EDITAR
+  // EDITAR ZONA
   // ==========================
 
   const editarZona = (zona) => {
+    if (!zona) return;
 
     setModoEdicion(true);
 
     setZonaSeleccionada(zona);
 
     setFormulario({
-      nombre: zona.nombre,
-      descripcion: zona.descripcion,
+      nombre: zona.nombre ?? "",
+      descripcion: zona.descripcion ?? "",
       estado: Number(zona.estado),
     });
 
     setMostrarModal(true);
-
   };
 
   // ==========================
-  // GUARDAR
+  // GUARDAR ZONA
   // ==========================
 
   const guardarZona = async () => {
-
     try {
-
       if (modoEdicion) {
-
         await api.put(
           `/zonas/${zonaSeleccionada.id}`,
           formulario
         );
 
         toast.success("Zona actualizada correctamente");
-
       } else {
-
-        await api.post(
-          "/zonas",
-          formulario
-        );
+        await api.post("/zonas", formulario);
 
         toast.success("Zona creada correctamente");
-
       }
 
       setMostrarModal(false);
 
-      cargarZonas();
+      setZonaSeleccionada(null);
 
+      await cargarZonas();
     } catch (error) {
-
       console.error(error);
 
       toast.error(
         error.response?.data?.message ||
-        "Ocurrió un error."
+          "Ocurrió un error."
       );
-
     }
-
   };
 
   // ==========================
-// FILTRAR ZONAS
-// ==========================
-
-const zonasFiltradas = zonas.filter((z) =>
-
-  z.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-
-  (z.descripcion || "")
-    .toLowerCase()
-    .includes(busqueda.toLowerCase())
-
-);
+  // ABRIR ELIMINAR
   // ==========================
-// ABRIR MODAL ELIMINAR
-// ==========================
 
-const abrirEliminarZona = (zona) => {
+  const abrirEliminarZona = (zona) => {
+    if (!zona) return;
 
-  setZonaAEliminar(zona);
+    setZonaAEliminar(zona);
+    setMostrarConfirmacion(true);
+  };
 
-  setMostrarConfirmacion(true);
+  // ==========================
+  // ELIMINAR ZONA
+  // ==========================
 
-};
+  const eliminarZona = async () => {
+    if (!zonaAEliminar) return;
 
-// ==========================
-// CONFIRMAR ELIMINAR
-// ==========================
+    try {
+      await api.delete(`/zonas/${zonaAEliminar.id}`);
 
-const eliminarZona = async () => {
+      toast.success("Zona eliminada correctamente");
 
-  if (!zonaAEliminar) return;
+      setMostrarConfirmacion(false);
+      setZonaAEliminar(null);
+      setZonaSeleccionada(null);
 
-  try {
+      await cargarZonas();
+    } catch (error) {
+      console.error(error);
 
-    await api.delete(`/zonas/${zonaAEliminar.id}`);
+      toast.error(
+        error.response?.data?.message ||
+          "No se pudo eliminar la zona."
+      );
+    }
+  };
 
-    toast.success("Zona eliminada correctamente");
+  // ==========================
+  // FILTRAR
+  // ==========================
 
-    setMostrarConfirmacion(false);
+  const zonasFiltradas = zonas.filter((zona) => {
+    const nombre = zona.nombre?.toLowerCase() || "";
 
-    setZonaAEliminar(null);
+    const descripcion =
+      zona.descripcion?.toLowerCase() || "";
 
-    cargarZonas();
+    const textoBusqueda = busqueda.toLowerCase();
 
-  } catch (error) {
-
-    console.error(error);
-
-    toast.error(
-      error.response?.data?.message ||
-      "No se pudo eliminar la zona."
+    return (
+      nombre.includes(textoBusqueda) ||
+      descripcion.includes(textoBusqueda)
     );
+  });
 
-  }
+  // ==========================
+  // RENDER
+  // ==========================
 
-};
-// ==================
-return (
-  <div className="h-full bg-slate-900 p-8 text-white">
+  return (
+    <div className="w-full">
 
-    {/* Encabezado */}
-    <div className="flex justify-between items-center mb-8">
+      {/* ==========================
+          ENCABEZADO
+      ========================== */}
 
-      <div>
+      <div className="flex flex-col xl:flex-row xl:justify-between xl:items-center gap-6 mb-8">
 
-        <p className="text-blue-400 uppercase text-sm font-semibold tracking-widest">
-          Administración
-        </p>
+        <div>
+          <p className="text-blue-400 uppercase text-sm font-semibold tracking-widest">
+            Administración
+          </p>
 
-        <h1 className="text-5xl font-bold">
-          Gestión de Zonas
-        </h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-white">
+            Gestión de Zonas
+          </h1>
 
-        <p className="text-slate-400 mt-2">
-          Administra todas las zonas de cobertura de Spacex Fiber.
-        </p>
+          <p className="text-slate-400 mt-2">
+            Administra todas las zonas de cobertura de Spacex Fiber.
+          </p>
+        </div>
 
       </div>
 
-      <button
-        onClick={abrirNuevaZona}
-        className="bg-blue-600 hover:bg-blue-700 transition px-6 py-3 rounded-xl font-semibold shadow-lg"
-      >
-        + Nueva Zona
-      </button>
+      {/* ==========================
+          TARJETAS ESTADÍSTICAS
+      ========================== */}
 
-    </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
-    {/* Tarjetas */}
+        {/* TOTAL */}
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="
+          bg-slate-800
+          rounded-2xl
+          p-6
+          border
+          border-slate-700
+          shadow-xl
+        ">
+          <p className="text-slate-400">
+            📍 Total Zonas
+          </p>
 
-      <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+          <h2 className="text-4xl font-bold mt-2 text-white">
+            {zonas.length}
+          </h2>
+        </div>
 
-        <p className="text-slate-400">
-          Total Zonas
-        </p>
+        {/* ACTIVAS */}
 
-        <h2 className="text-4xl font-bold mt-2">
+        <div className="
+          bg-slate-800
+          rounded-2xl
+          p-6
+          border
+          border-slate-700
+          shadow-xl
+        ">
+          <p className="text-green-400">
+            🟢 Activas
+          </p>
+
+          <h2 className="text-4xl font-bold mt-2 text-green-400">
+            {
+              zonas.filter(
+                (zona) => Number(zona.estado) === 1
+              ).length
+            }
+          </h2>
+        </div>
+
+        {/* INACTIVAS */}
+
+        <div className="
+          bg-slate-800
+          rounded-2xl
+          p-6
+          border
+          border-slate-700
+          shadow-xl
+        ">
+          <p className="text-red-400">
+            🔴 Inactivas
+          </p>
+
+          <h2 className="text-4xl font-bold mt-2 text-red-400">
+            {
+              zonas.filter(
+                (zona) => Number(zona.estado) !== 1
+              ).length
+            }
+          </h2>
+        </div>
+
+      </div>
+
+      {/* ==========================
+          BUSCADOR
+      ========================== */}
+
+      <div className="mb-6">
+
+        <input
+          type="text"
+          placeholder="🔍 Buscar por nombre o descripción..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="
+            w-full
+            bg-slate-800
+            border
+            border-slate-700
+            rounded-xl
+            p-4
+            text-white
+            outline-none
+            focus:border-blue-500
+            transition
+          "
+        />
+
+      </div>
+
+      {/* ==========================
+          BOTONES
+      ========================== */}
+
+      <div className="
+        flex
+        flex-col
+        sm:flex-row
+        gap-3
+        mb-6
+      ">
+
+        {/* NUEVA */}
+
+        <button
+          onClick={abrirNuevaZona}
+          className="
+            bg-blue-600
+            hover:bg-blue-700
+            text-white
+            px-6
+            py-3
+            rounded-xl
+            font-semibold
+            shadow-lg
+            transition
+          "
+        >
+          + Nueva Zona
+        </button>
+
+        {/* EDITAR */}
+
+        <button
+          disabled={!zonaSeleccionada}
+          onClick={() => editarZona(zonaSeleccionada)}
+          className={`
+            px-6
+            py-3
+            rounded-xl
+            font-semibold
+            transition
+
+            ${
+              zonaSeleccionada
+                ? "bg-amber-500 hover:bg-amber-600 text-white"
+                : "bg-slate-700 text-slate-500 cursor-not-allowed"
+            }
+          `}
+        >
+          ✏️ Editar
+        </button>
+
+        {/* ELIMINAR */}
+
+        <button
+          disabled={!zonaSeleccionada}
+          onClick={() => abrirEliminarZona(zonaSeleccionada)}
+          className={`
+            px-6
+            py-3
+            rounded-xl
+            font-semibold
+            transition
+
+            ${
+              zonaSeleccionada
+                ? "bg-red-600 hover:bg-red-700 text-white"
+                : "bg-slate-700 text-slate-500 cursor-not-allowed"
+            }
+          `}
+        >
+          🗑️ Eliminar
+        </button>
+
+      </div>
+
+      {/* ==========================
+          CONTADOR
+      ========================== */}
+
+      <p className="text-slate-400 mb-4">
+        Mostrando{" "}
+        <span className="text-white font-semibold">
+          {zonasFiltradas.length}
+        </span>{" "}
+        de{" "}
+        <span className="text-white font-semibold">
           {zonas.length}
-        </h2>
+        </span>{" "}
+        zonas
+      </p>
 
-      </div>
+      {/* =====================================================
+          VISTA CELULAR
+      ===================================================== */}
 
-      <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+      <div className="md:hidden space-y-4">
 
-        <p className="text-green-400">
-          Activas
-        </p>
+        {zonasFiltradas.length === 0 ? (
 
-        <h2 className="text-4xl font-bold mt-2">
-          {zonas.filter(z => Number(z.estado) === 1).length}
-        </h2>
+          <div className="
+            bg-slate-800
+            border
+            border-slate-700
+            rounded-2xl
+            p-8
+            text-center
+            text-slate-400
+          ">
+            No existen zonas registradas.
+          </div>
 
-      </div>
+        ) : (
 
-      <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700">
+          zonasFiltradas.map((zona) => {
 
-        <p className="text-yellow-400">
-          Cobertura
-        </p>
+            const seleccionada =
+              zonaSeleccionada?.id === zona.id;
 
-        <h2 className="text-4xl font-bold mt-2">
-          100%
-        </h2>
+            return (
 
-      </div>
-
-    </div>
-
-    {/* Buscador */}
-
-    <div className="mb-8">
-
-      <input
-        type="text"
-        placeholder="🔍 Buscar zona..."
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        className="w-full bg-slate-800 border border-slate-700 rounded-xl p-4 outline-none focus:border-blue-500"
-      />
-
-    </div>
-
-    {/* Tabla */}
-
-    <div className="bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 shadow-2xl">
-
-      <table className="w-full">
-
-        <thead className="bg-slate-700">
-
-          <tr>
-
-            <th className="p-4 text-left">Nombre</th>
-            <th className="p-4 text-left">Descripción</th>
-            <th className="p-4 text-center">Estado</th>
-            <th className="p-4 text-center">Acciones</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          {zonasFiltradas.length === 0 ? (
-
-            <tr>
-
-              <td
-                colSpan="4"
-                className="text-center p-8 text-slate-400"
-              >
-                No existen zonas registradas.
-              </td>
-
-            </tr>
-
-          ) : (
-
-            zonasFiltradas.map((zona) => (
-
-              <tr
+              <div
                 key={zona.id}
-                className="border-t border-slate-700 hover:bg-slate-700 transition"
+                onClick={() =>
+                  setZonaSeleccionada(zona)
+                }
+                className={`
+                  bg-slate-800
+                  border
+                  rounded-2xl
+                  p-6
+                  shadow-xl
+                  cursor-pointer
+                  transition-all
+
+                  ${
+                    seleccionada
+                      ? "border-blue-500 bg-blue-900/30"
+                      : "border-slate-700 hover:border-slate-500"
+                  }
+                `}
               >
 
-                <td className="p-4 font-semibold">
-                  {zona.nombre}
-                </td>
+                {/* CABECERA */}
 
-                <td className="p-4 text-slate-300">
-                  {zona.descripcion}
-                </td>
+                <div className="
+                  flex
+                  justify-between
+                  items-start
+                  gap-4
+                  mb-5
+                ">
 
-                <td className="p-4 text-center">
+                  <div>
+
+                    <p className="text-blue-400 text-sm font-mono mb-1">
+                      ZONA-{zona.id}
+                    </p>
+
+                    <h2 className="text-xl font-bold text-white">
+                      {zona.nombre}
+                    </h2>
+
+                  </div>
 
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-bold ${
-                      Number(zona.estado) === 1
-                        ? "bg-green-500/20 text-green-400"
-                        : "bg-red-500/20 text-red-400"
-                    }`}
+                    className={`
+                      shrink-0
+                      px-3
+                      py-1
+                      rounded-full
+                      text-xs
+                      font-bold
+
+                      ${
+                        Number(zona.estado) === 1
+                          ? "bg-green-500/20 text-green-400"
+                          : "bg-red-500/20 text-red-400"
+                      }
+                    `}
                   >
                     {Number(zona.estado) === 1
                       ? "Activa"
                       : "Inactiva"}
                   </span>
 
-                </td>
+                </div>
 
-                <td className="p-4">
+                {/* DESCRIPCIÓN */}
 
-                  <div className="flex justify-center gap-3">
+                <div className="
+                  border-t
+                  border-slate-700
+                  pt-4
+                ">
 
-                    <button
-                      onClick={() => editarZona(zona)}
-                      className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition"
-                    >
-                      Editar
-                    </button>
+                  <p className="text-slate-500 text-sm mb-1">
+                    Descripción
+                  </p>
 
-                    <button
-                      onClick={() => abrirEliminarZona(zona)}
-                      className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition"
-                    >
-                      Eliminar
-                    </button>
+                  <p className="
+                    text-slate-300
+                    leading-relaxed
+                    break-words
+                  ">
+                    {zona.descripcion || "Sin descripción"}
+                  </p>
 
-                  </div>
+                </div>
 
-                </td>
+                {/* SELECCIÓN */}
+
+                <div className="
+                  border-t
+                  border-slate-700
+                  mt-5
+                  pt-4
+                  text-slate-500
+                  text-sm
+                ">
+                  {seleccionada
+                    ? "✓ Zona seleccionada"
+                    : "Toca para seleccionar"}
+                </div>
+
+              </div>
+
+            );
+          })
+
+        )}
+
+      </div>
+
+      {/* =====================================================
+          VISTA PC / TABLET
+      ===================================================== */}
+
+      <div className="
+        hidden
+        md:block
+        bg-slate-800
+        rounded-2xl
+        overflow-hidden
+        border
+        border-slate-700
+        shadow-2xl
+      ">
+
+        <div className="overflow-x-auto">
+
+          <table className="w-full">
+
+            <thead className="bg-slate-700">
+
+              <tr className="text-left text-white">
+
+                <th className="p-4">
+                  Nombre
+                </th>
+
+                <th className="p-4">
+                  Descripción
+                </th>
+
+                <th className="p-4 text-center">
+                  Estado
+                </th>
 
               </tr>
 
-            ))
+            </thead>
 
-          )}
+            <tbody>
 
-        </tbody>
+              {zonasFiltradas.length === 0 ? (
 
-      </table>
+                <tr>
+
+                  <td
+                    colSpan="3"
+                    className="
+                      text-center
+                      p-10
+                      text-slate-400
+                    "
+                  >
+                    No existen zonas registradas.
+                  </td>
+
+                </tr>
+
+              ) : (
+
+                zonasFiltradas.map((zona) => {
+
+                  const seleccionada =
+                    zonaSeleccionada?.id === zona.id;
+
+                  return (
+
+                    <tr
+                      key={zona.id}
+                      onClick={() =>
+                        setZonaSeleccionada(zona)
+                      }
+                      className={`
+                        border-t
+                        border-slate-700
+                        cursor-pointer
+                        transition
+
+                        ${
+                          seleccionada
+                            ? "bg-blue-900/40"
+                            : "hover:bg-slate-700"
+                        }
+                      `}
+                    >
+
+                      <td className="
+                        p-4
+                        font-semibold
+                        text-white
+                      ">
+                        {zona.nombre}
+                      </td>
+
+                      <td className="
+                        p-4
+                        text-slate-300
+                        max-w-md
+                      ">
+                        {zona.descripcion ||
+                          "Sin descripción"}
+                      </td>
+
+                      <td className="p-4 text-center">
+
+                        <span
+                          className={`
+                            px-3
+                            py-1
+                            rounded-full
+                            text-xs
+                            font-bold
+
+                            ${
+                              Number(zona.estado) === 1
+                                ? "bg-green-500/20 text-green-400"
+                                : "bg-red-500/20 text-red-400"
+                            }
+                          `}
+                        >
+                          {Number(zona.estado) === 1
+                            ? "Activa"
+                            : "Inactiva"}
+                        </span>
+
+                      </td>
+
+                    </tr>
+
+                  );
+                })
+
+              )}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      {/* ==========================
+          MODAL ZONA
+      ========================== */}
+
+      <ZonaModal
+        mostrarModal={mostrarModal}
+        setMostrarModal={setMostrarModal}
+        formulario={formulario}
+        setFormulario={setFormulario}
+        guardarZona={guardarZona}
+        modoEdicion={modoEdicion}
+      />
+
+      {/* ==========================
+          CONFIRMAR ELIMINACIÓN
+      ========================== */}
+
+      <ConfirmModal
+        open={mostrarConfirmacion}
+        title="¿Eliminar esta zona?"
+        message="Esta acción eliminará la zona del sistema."
+        subMessage="No podrás recuperar esta información."
+        icon="delete"
+        color="red"
+        confirmText="Sí, eliminar"
+        cancelText="Cancelar"
+        onConfirm={eliminarZona}
+        onCancel={() => {
+          setMostrarConfirmacion(false);
+          setZonaAEliminar(null);
+        }}
+      />
 
     </div>
-
-    <ZonaModal
-      mostrarModal={mostrarModal}
-      setMostrarModal={setMostrarModal}
-      formulario={formulario}
-      setFormulario={setFormulario}
-      guardarZona={guardarZona}
-      modoEdicion={modoEdicion}
-    />
-    <ConfirmModal
-  open={mostrarConfirmacion}
-  title="¿Eliminar esta zona?"
-  message="Esta acción eliminará la zona del sistema."
-  subMessage="No podrás recuperar esta información."
-  icon="delete"
-  color="red"
-  confirmText="Sí, eliminar"
-  cancelText="Cancelar"
-  onConfirm={eliminarZona}
-  onCancel={() => {
-    setMostrarConfirmacion(false);
-    setZonaAEliminar(null);
-  }}
-/>
-
-  </div>
-);
+  );
 };
+
 export default Zonas;

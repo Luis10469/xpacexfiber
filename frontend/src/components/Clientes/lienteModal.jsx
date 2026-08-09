@@ -11,33 +11,94 @@ const ClienteModal = ({
   if (!mostrarModal) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex justify-center items-center z-50">
+    <div
+      className="
+        fixed
+        inset-0
+        z-[100]
+        flex
+        items-center
+        justify-center
+        bg-black/70
+        backdrop-blur-sm
+        p-4
+        overflow-y-auto
+      "
+    >
+      <div
+        className="
+          relative
+          w-full
+          max-w-5xl
+          max-h-[95vh]
+          overflow-y-auto
 
-      <div className="bg-slate-800 rounded-3xl w-full max-w-5xl p-10 shadow-2xl">
+          bg-slate-800
+          border
+          border-slate-700
+          rounded-3xl
 
-        <div className="flex justify-between items-center mb-8">
+          p-6
+          md:p-10
 
-          <h2 className="text-4xl font-bold text-white">
+          shadow-2xl
+        "
+      >
+        {/* =========================
+            ENCABEZADO
+        ========================== */}
 
-            {modoEdicion ? "Editar Cliente" : "Nuevo Cliente"}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <p className="text-blue-400 text-sm uppercase tracking-widest font-semibold">
+              Administración
+            </p>
 
-          </h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mt-1">
+              {modoEdicion ? "Editar Cliente" : "Nuevo Cliente"}
+            </h2>
+
+            <p className="text-slate-400 mt-2">
+              {modoEdicion
+                ? "Actualiza la información del cliente."
+                : "Registra un nuevo cliente en WiFiConnect."}
+            </p>
+          </div>
 
           <button
+            type="button"
             onClick={() => setMostrarModal(false)}
-            className="text-3xl text-slate-400 hover:text-white"
+            className="
+              flex
+              items-center
+              justify-center
+              w-10
+              h-10
+
+              rounded-xl
+
+              text-2xl
+              text-slate-400
+
+              hover:bg-slate-700
+              hover:text-white
+
+              transition
+            "
+            aria-label="Cerrar modal"
           >
             ×
           </button>
-
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        {/* =========================
+            FORMULARIO
+        ========================== */}
 
-          {/* Nombre */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
+          {/* NOMBRE */}
           <div>
-
             <label className="block mb-2 text-slate-300 font-semibold">
               Nombre
             </label>
@@ -51,15 +112,27 @@ const ClienteModal = ({
                   nombre: e.target.value,
                 })
               }
-              className="w-full bg-slate-900 rounded-xl px-5 py-4 border border-slate-600"
-            />
+              placeholder="Nombre completo"
+              className="
+                w-full
+                bg-slate-900
+                text-white
+                rounded-xl
+                px-5
+                py-4
+                border
+                border-slate-600
+                outline-none
 
+                focus:border-blue-500
+                focus:ring-2
+                focus:ring-blue-500/20
+              "
+            />
           </div>
 
-          {/* Correo */}
-
+          {/* CORREO */}
           <div>
-
             <label className="block mb-2 text-slate-300 font-semibold">
               Correo
             </label>
@@ -73,15 +146,27 @@ const ClienteModal = ({
                   correo: e.target.value,
                 })
               }
-              className="w-full bg-slate-900 rounded-xl px-5 py-4 border border-slate-600"
-            />
+              placeholder="correo@ejemplo.com"
+              className="
+                w-full
+                bg-slate-900
+                text-white
+                rounded-xl
+                px-5
+                py-4
+                border
+                border-slate-600
+                outline-none
 
+                focus:border-blue-500
+                focus:ring-2
+                focus:ring-blue-500/20
+              "
+            />
           </div>
 
-          {/* Teléfono */}
-
+          {/* TELÉFONO */}
           <div>
-
             <label className="block mb-2 text-slate-300 font-semibold">
               Teléfono
             </label>
@@ -95,15 +180,27 @@ const ClienteModal = ({
                   telefono: e.target.value,
                 })
               }
-              className="w-full bg-slate-900 rounded-xl px-5 py-4 border border-slate-600"
-            />
+              placeholder="300 000 0000"
+              className="
+                w-full
+                bg-slate-900
+                text-white
+                rounded-xl
+                px-5
+                py-4
+                border
+                border-slate-600
+                outline-none
 
+                focus:border-blue-500
+                focus:ring-2
+                focus:ring-blue-500/20
+              "
+            />
           </div>
 
-          {/* Dirección */}
-
+          {/* DIRECCIÓN */}
           <div>
-
             <label className="block mb-2 text-slate-300 font-semibold">
               Dirección
             </label>
@@ -117,130 +214,202 @@ const ClienteModal = ({
                   direccion: e.target.value,
                 })
               }
-              className="w-full bg-slate-900 rounded-xl px-5 py-4 border border-slate-600"
-            />
+              placeholder="Dirección de instalación"
+              className="
+                w-full
+                bg-slate-900
+                text-white
+                rounded-xl
+                px-5
+                py-4
+                border
+                border-slate-600
+                outline-none
 
+                focus:border-blue-500
+                focus:ring-2
+                focus:ring-blue-500/20
+              "
+            />
           </div>
 
-          {/* Plan */}
-
+          {/* PLAN */}
           <div>
-
             <label className="block mb-2 text-slate-300 font-semibold">
               Plan
             </label>
 
             <select
-              value={formulario.plan_id}
+              value={formulario.plan_id || ""}
               onChange={(e) =>
                 setFormulario({
                   ...formulario,
                   plan_id: e.target.value,
                 })
               }
-              className="w-full bg-slate-900 rounded-xl px-5 py-4 border border-slate-600"
-            >
+              className="
+                w-full
+                bg-slate-900
+                text-white
+                rounded-xl
+                px-5
+                py-4
+                border
+                border-slate-600
+                outline-none
 
-              <option value="">Seleccione</option>
+                focus:border-blue-500
+                focus:ring-2
+                focus:ring-blue-500/20
+              "
+            >
+              <option value="">Seleccione un plan</option>
 
               {planes.map((plan) => (
-
                 <option key={plan.id} value={plan.id}>
-
                   {plan.nombre}
-
                 </option>
-
               ))}
-
             </select>
-
           </div>
 
-          {/* Zona */}
-
+          {/* ZONA */}
           <div>
-
             <label className="block mb-2 text-slate-300 font-semibold">
               Zona
             </label>
 
             <select
-              value={formulario.zona_id}
+              value={formulario.zona_id || ""}
               onChange={(e) =>
                 setFormulario({
                   ...formulario,
                   zona_id: e.target.value,
                 })
               }
-              className="w-full bg-slate-900 rounded-xl px-5 py-4 border border-slate-600"
-            >
+              className="
+                w-full
+                bg-slate-900
+                text-white
+                rounded-xl
+                px-5
+                py-4
+                border
+                border-slate-600
+                outline-none
 
-              <option value="">Seleccione</option>
+                focus:border-blue-500
+                focus:ring-2
+                focus:ring-blue-500/20
+              "
+            >
+              <option value="">Seleccione una zona</option>
 
               {zonas.map((zona) => (
-
                 <option key={zona.id} value={zona.id}>
-
                   {zona.nombre}
-
                 </option>
-
               ))}
-
             </select>
-
           </div>
 
-          {/* Estado */}
-
+          {/* ESTADO */}
           <div>
-
             <label className="block mb-2 text-slate-300 font-semibold">
               Estado
             </label>
 
             <select
-              value={formulario.estado}
+              value={formulario.estado || "activo"}
               onChange={(e) =>
                 setFormulario({
                   ...formulario,
                   estado: e.target.value,
                 })
               }
-              className="w-full bg-slate-900 rounded-xl px-5 py-4 border border-slate-600"
+              className="
+                w-full
+                bg-slate-900
+                text-white
+                rounded-xl
+                px-5
+                py-4
+                border
+                border-slate-600
+                outline-none
+
+                focus:border-blue-500
+                focus:ring-2
+                focus:ring-blue-500/20
+              "
             >
-
               <option value="activo">Activo</option>
-
               <option value="suspendido">Suspendido</option>
-
             </select>
-
           </div>
-
         </div>
 
-        <div className="flex justify-end gap-4 mt-10">
+        {/* =========================
+            BOTONES
+        ========================== */}
 
+        <div
+          className="
+            flex
+            flex-col-reverse
+            sm:flex-row
+            justify-end
+            gap-3
+            mt-10
+            pt-6
+            border-t
+            border-slate-700
+          "
+        >
           <button
+            type="button"
             onClick={() => setMostrarModal(false)}
-            className="bg-slate-600 hover:bg-slate-500 px-8 py-4 rounded-xl font-semibold"
+            className="
+              px-6
+              py-3
+              rounded-xl
+
+              bg-slate-700
+              hover:bg-slate-600
+
+              text-white
+              font-semibold
+
+              transition
+            "
           >
             Cancelar
           </button>
 
           <button
+            type="button"
             onClick={guardarCliente}
-            className="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-xl font-semibold"
+            className="
+              px-6
+              py-3
+              rounded-xl
+
+              bg-blue-600
+              hover:bg-blue-700
+
+              text-white
+              font-semibold
+
+              shadow-lg
+              hover:shadow-blue-500/20
+
+              transition
+            "
           >
             {modoEdicion ? "Actualizar Cliente" : "Guardar Cliente"}
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 };

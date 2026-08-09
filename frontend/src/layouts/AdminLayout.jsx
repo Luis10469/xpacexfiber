@@ -8,8 +8,10 @@ const AdminLayout = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
-        Cargando...
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <p className="text-white text-lg">
+          Cargando...
+        </p>
       </div>
     );
   }
@@ -19,23 +21,34 @@ const AdminLayout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-slate-950">
 
-      {/* SIDEBAR FIJO */}
+      {/* SIDEBAR */}
       <Sidebar rol="admin" />
 
-      {/* CONTENIDO */}
+      {/* CONTENIDO PRINCIPAL */}
       <main
         className="
-          ml-[360px]
           min-h-screen
-          w-[calc(100%-360px)]
-          p-6
+          min-w-0
+          w-full
           box-border
           overflow-x-hidden
+
+          px-4
+          pt-24
+          pb-6
+
+          lg:ml-[360px]
+          lg:w-[calc(100%-360px)]
+          lg:px-8
+          lg:pt-8
+          lg:pb-8
         "
       >
-        <Outlet />
+        <div className="w-full max-w-[1600px] mx-auto">
+          <Outlet />
+        </div>
       </main>
 
       {/* SEGURIDAD */}

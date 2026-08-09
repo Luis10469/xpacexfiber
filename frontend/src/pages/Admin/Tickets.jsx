@@ -1,6 +1,8 @@
 import TicketHeader from "../../components/Tickets/Header/TicketHeader";
 import TicketStats from "../../components/Tickets/Stats/TicketStats";
+
 import TicketLayout from "../../components/Tickets/Layout/TicketLayout";
+import TicketLayoutMobile from "../../components/Tickets/Layout/TicketLayoutMobile";
 
 import useTickets from "../../components/Tickets/hooks/useTickets";
 import { useAuth } from "../../context/AuthContext";
@@ -101,21 +103,59 @@ const TicketsAdmin = () => {
           CONTENIDO PRINCIPAL
       ============================== */}
       <div className="w-full min-h-[650px]">
-        <TicketLayout
-          tickets={tickets}
-          ticketSeleccionado={ticketSeleccionado}
-          setTicketSeleccionado={setTicketSeleccionado}
-          seleccionarTicket={seleccionarTicket}
-          cargarTickets={cargarTickets}
-          mensajes={mensajes}
-          cargarMensajes={cargarMensajes}
-          enviarMensajeTicket={enviarMensajeTicket}
-          tecnicos={tecnicos}
-          editarTicket={editarTicket}
-          usuarioActual={user}
-          historial={historial}
-        />
-      </div>
+
+  {/* =================================================
+      📱 MÓVIL
+      Solo aparece en pantallas pequeñas
+  ================================================= */}
+
+  <div className="lg:hidden w-full h-[650px] min-h-0">
+
+    <TicketLayoutMobile
+      tickets={tickets}
+      ticketSeleccionado={ticketSeleccionado}
+      setTicketSeleccionado={setTicketSeleccionado}
+      seleccionarTicket={seleccionarTicket}
+      cargarTickets={cargarTickets}
+
+      mensajes={mensajes}
+      cargarMensajes={cargarMensajes}
+      enviarMensajeTicket={enviarMensajeTicket}
+
+      tecnicos={tecnicos}
+      editarTicket={editarTicket}
+      puedeGestionar={true}
+      usuarioActual={user}
+    />
+
+  </div>
+
+
+  {/* =================================================
+      💻 PC
+      NO TOCAMOS SU ESTRUCTURA
+  ================================================= */}
+
+  <div className="hidden lg:block w-full h-[650px]">
+
+    <TicketLayout
+      tickets={tickets}
+      ticketSeleccionado={ticketSeleccionado}
+      setTicketSeleccionado={setTicketSeleccionado}
+      seleccionarTicket={seleccionarTicket}
+      cargarTickets={cargarTickets}
+      mensajes={mensajes}
+      cargarMensajes={cargarMensajes}
+      enviarMensajeTicket={enviarMensajeTicket}
+      tecnicos={tecnicos}
+      editarTicket={editarTicket}
+      usuarioActual={user}
+      historial={historial}
+    />
+
+  </div>
+
+</div>
 
     </div>
   );

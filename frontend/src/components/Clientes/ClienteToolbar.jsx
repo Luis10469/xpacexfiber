@@ -5,16 +5,29 @@ const ClienteToolbar = ({
   clienteSeleccionado,
 }) => {
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-wrap gap-3">
 
+      {/* NUEVO CLIENTE */}
       <button
+        type="button"
         onClick={abrirNuevoCliente}
-        className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl font-semibold shadow-lg transition"
+        className="
+          bg-blue-600
+          hover:bg-blue-700
+          px-6
+          py-3
+          rounded-xl
+          font-semibold
+          shadow-lg
+          transition
+        "
       >
         + Nuevo Cliente
       </button>
 
+      {/* EDITAR */}
       <button
+        type="button"
         disabled={!clienteSeleccionado}
         onClick={() => editarCliente(clienteSeleccionado)}
         className={`px-6 py-3 rounded-xl font-semibold transition ${
@@ -26,7 +39,9 @@ const ClienteToolbar = ({
         ✏ Editar
       </button>
 
+      {/* SUSPENDER */}
       <button
+        type="button"
         disabled={!clienteSeleccionado}
         onClick={() => suspenderCliente(clienteSeleccionado.id)}
         className={`px-6 py-3 rounded-xl font-semibold transition ${
