@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import StarField from '../../components/StarField/StarField';
 
 const faqs = [
   {
@@ -33,138 +34,170 @@ const Inicio = () => {
   const [faqAbierta, setFaqAbierta] = useState(null);
 
   return (
-    <div className="text-center py-10 text-white">
+    <div className="relative min-h-screen text-center py-10 text-white">
+      
+      {/* ======================================
+          FONDO ANIMADO - SOLO INICIO
+      ====================================== */}
+      <StarField />
 
-      {/* HERO */}
-      <section className="py-10">
-        <h1 className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-2xl">
-          Bienvenido a{' '}
-          <span className="text-blue-400">SpaceX Fiber</span>
-        </h1>
+      {/* ======================================
+          CONTENIDO
+      ====================================== */}
+      <div className="relative z-10">
 
-        <p className="text-xl text-gray-300 mb-12">
-          Internet de alta velocidad para tu hogar y empresa
-        </p>
-      </section>
+        {/* HERO */}
+        <section className="py-10">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-2xl">
+            Bienvenido a{' '}
+            <span className="text-blue-400">
+              SpaceX Fiber
+            </span>
+          </h1>
 
-      {/* BENEFICIOS */}
-      <section className="grid md:grid-cols-3 gap-6 mt-10">
-
-        <div className="bg-slate-800/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 hover:bg-slate-800/20 transition transform hover:scale-105">
-          <div className="text-5xl mb-4">🚀</div>
-
-          <h3 className="font-bold text-2xl mb-2 text-white">
-            Alta Velocidad
-          </h3>
-
-          <p className="text-gray-200">
-            Planes desde 50MB hasta 1GB
+          <p className="text-xl text-gray-300 mb-12">
+            Internet de alta velocidad para tu hogar y empresa
           </p>
-        </div>
+        </section>
 
-        <div className="bg-slate-800/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 hover:bg-slate-800/20 transition transform hover:scale-105">
-          <div className="text-5xl mb-4">📡</div>
+        {/* BENEFICIOS */}
+        <section className="grid md:grid-cols-3 gap-6 mt-10">
 
-          <h3 className="font-bold text-2xl mb-2 text-white">
-            Cobertura Total
-          </h3>
+          {/* VELOCIDAD */}
+          <div className="bg-slate-800/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 hover:bg-slate-800/20 transition transform hover:scale-105">
+            <div className="text-5xl mb-4">
+              🚀
+            </div>
 
-          <p className="text-gray-200">
-            Llegamos a tu barrio o residencia
-          </p>
-        </div>
+            <h3 className="font-bold text-2xl mb-2 text-white">
+              Alta Velocidad
+            </h3>
 
-        <div className="bg-slate-800/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 hover:bg-slate-800/20 transition transform hover:scale-105">
-          <div className="text-5xl mb-4">💬</div>
+            <p className="text-gray-200">
+              Planes desde 50MB hasta 1GB
+            </p>
+          </div>
 
-          <h3 className="font-bold text-2xl mb-2 text-white">
-            Soporte 24/7
-          </h3>
+          {/* COBERTURA */}
+          <div className="bg-slate-800/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 hover:bg-slate-800/20 transition transform hover:scale-105">
+            <div className="text-5xl mb-4">
+              📡
+            </div>
 
-          <p className="text-gray-200">
-            Atención personalizada todos los días
-          </p>
-        </div>
+            <h3 className="font-bold text-2xl mb-2 text-white">
+              Cobertura Total
+            </h3>
 
-      </section>
+            <p className="text-gray-200">
+              Llegamos a tu barrio o residencia
+            </p>
+          </div>
 
-      {/* FAQ */}
-      <section className="max-w-4xl mx-auto mt-24 px-4 text-left">
+          {/* SOPORTE */}
+          <div className="bg-slate-800/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 hover:bg-slate-800/20 transition transform hover:scale-105">
+            <div className="text-5xl mb-4">
+              💬
+            </div>
 
-        <div className="text-center mb-10">
-          <span className="text-blue-400 font-semibold uppercase tracking-widest text-sm">
-            Centro de ayuda
-          </span>
+            <h3 className="font-bold text-2xl mb-2 text-white">
+              Soporte 24/7
+            </h3>
 
-          <h2 className="text-4xl md:text-5xl font-bold mt-3">
-            Preguntas frecuentes
-          </h2>
+            <p className="text-gray-200">
+              Atención personalizada todos los días
+            </p>
+          </div>
 
-          <p className="text-gray-400 mt-4">
-            Haz clic en una pregunta para ver su respuesta.
-          </p>
-        </div>
+        </section>
 
-        <div className="space-y-4">
+        {/* FAQ */}
+        <section className="max-w-4xl mx-auto mt-24 px-4 text-left">
 
-          {faqs.map((faq, index) => {
-            const abierta = faqAbierta === index;
+          <div className="text-center mb-10">
 
-            return (
-              <div
-                key={index}
-                className="bg-slate-800/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden"
-              >
+            <span className="text-blue-400 font-semibold uppercase tracking-widest text-sm">
+              Centro de ayuda
+            </span>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFaqAbierta(abierta ? null : index)
-                  }
-                  className="w-full flex justify-between items-center gap-4 p-6 text-left hover:bg-slate-800/10 transition"
+            <h2 className="text-4xl md:text-5xl font-bold mt-3">
+              Preguntas frecuentes
+            </h2>
+
+            <p className="text-gray-400 mt-4">
+              Haz clic en una pregunta para ver su respuesta.
+            </p>
+
+          </div>
+
+          {/* PREGUNTAS */}
+          <div className="space-y-4">
+
+            {faqs.map((faq, index) => {
+              const abierta = faqAbierta === index;
+
+              return (
+                <div
+                  key={index}
+                  className="bg-slate-800/10 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden"
                 >
-                  <span className="font-bold text-lg">
-                    {faq.pregunta}
-                  </span>
 
-                  <span
-                    className={`text-blue-400 text-3xl transition-transform duration-300 ${
-                      abierta ? 'rotate-45' : ''
-                    }`}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFaqAbierta(
+                        abierta ? null : index
+                      )
+                    }
+                    className="w-full flex justify-between items-center gap-4 p-6 text-left hover:bg-slate-800/10 transition"
                   >
-                    +
-                  </span>
-                </button>
 
-                {abierta && (
-                  <div className="px-6 pb-6 text-gray-300 leading-relaxed">
-                    <div className="border-t border-white/10 pt-5">
-                      {faq.respuesta}
+                    <span className="font-bold text-lg">
+                      {faq.pregunta}
+                    </span>
+
+                    <span
+                      className={`text-blue-400 text-3xl transition-transform duration-300 ${
+                        abierta ? 'rotate-45' : ''
+                      }`}
+                    >
+                      +
+                    </span>
+
+                  </button>
+
+                  {abierta && (
+                    <div className="px-6 pb-6 text-gray-300 leading-relaxed">
+
+                      <div className="border-t border-white/10 pt-5">
+                        {faq.respuesta}
+                      </div>
+
                     </div>
-                  </div>
-                )}
+                  )}
 
-              </div>
-            );
-          })}
+                </div>
+              );
+            })}
 
-        </div>
+          </div>
 
-        {/* BOTÓN FAQ COMPLETO */}
-        <div className="text-center mt-8">
-          <Link
-            to="/faq"
-            className="inline-block text-blue-400 hover:text-blue-300 font-semibold transition"
-          >
-            Ver todas las preguntas →
-          </Link>
-        </div>
+          {/* BOTÓN FAQ COMPLETO */}
+          <div className="text-center mt-8">
 
-      </section>
+            <Link
+              to="/faq"
+              className="inline-block text-blue-400 hover:text-blue-300 font-semibold transition"
+            >
+              Ver todas las preguntas →
+            </Link>
 
+          </div>
+
+        </section>
+
+      </div>
     </div>
   );
 };
 
 export default Inicio;
-

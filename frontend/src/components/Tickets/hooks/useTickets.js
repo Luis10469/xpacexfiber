@@ -390,26 +390,32 @@ const useTickets = ({ modoAdmin = true } = {}) => {
   // ======================================
   // CARGAR MENSAJES AL SELECCIONAR TICKET
   // ======================================
+useEffect(() => {
+  if (!ticketSeleccionado?.id) {
+    setMensajes([]);
+    return;
+  }
 
-  useEffect(() => {
-    if (!ticketSeleccionado?.id) {
-      setMensajes([]);
-      return;
-    }
+  const ticketId = ticketSeleccionado.id;
 
-    cargarMensajes(
-      ticketSeleccionado.id
-    );
-    cargarHistorial(
-      ticketSeleccionado.id
-    );
-  }, [
-    ticketSeleccionado,
-    cargarMensajes,
-    cargarHistorial,
-  ]);
+  // Cargar inmediatamente
+  cargarMensajes(ticketId);
+  cargarHistorial(ticketId);
 
+  // Actualizar mensajes cada 3 segundos
+  const intervalo = setInterval(() => {
+    cargarMensajes(ticketId);
+  }, 3000);
 
+  // Limpiar cuando se cambia de ticket
+  return () => {
+    clearInterval(intervalo);
+  };
+}, [
+  ticketSeleccionado?.id,
+  cargarMensajes,
+  cargarHistorial,
+]);
   // ======================================
   // RETORNO
   // ======================================
