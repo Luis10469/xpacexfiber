@@ -8,6 +8,8 @@ const LoginLogs = () => {
 
   const [busqueda, setBusqueda] = useState("");
 
+  const [logSeleccionado, setLogSeleccionado] = useState(null);
+
   // ==========================
   // CARGAR HISTORIAL
   // ==========================
@@ -40,7 +42,23 @@ const LoginLogs = () => {
   // FILTRO
   // ==========================
 
-  const logsFiltrados = logs.filter((log) =>
+  const hayBusqueda = busqueda.trim().length > 0;
+
+  const haceMenosDe24h = (fecha) => {
+
+    const veinticuatroHoras = 24 * 60 * 60 * 1000;
+
+    return Date.now() - new Date(fecha).getTime() <= veinticuatroHoras;
+
+  };
+
+  // Sin búsqueda: solo últimas 24h.
+  // Con búsqueda por correo: todo el historial, sin límite de fecha.
+  const logsFiltrados = (
+    hayBusqueda
+      ? logs
+      : logs.filter((log) => haceMenosDe24h(log.fecha))
+  ).filter((log) =>
 
     log.correo
       .toLowerCase()
@@ -55,6 +73,15 @@ const LoginLogs = () => {
   const formatearFecha = (fecha) => {
 
     return new Date(fecha).toLocaleString("es-CO");
+
+  };
+
+  const estadoBadgeClass = (estado) => {
+
+    if (estado === "Exitoso") return "bg-green-500/20 text-green-400";
+    if (estado === "Cuenta bloqueada") return "bg-yellow-500/20 text-yellow-400";
+
+    return "bg-red-500/20 text-red-400";
 
   };
 
@@ -84,11 +111,23 @@ const LoginLogs = () => {
 
           <p className="text-slate-400 mt-2">
 
-            Consulta todos los inicios de sesión registrados en el sistema.
+            {hayBusqueda
+              ? "Mostrando todo el historial que coincide con la búsqueda."
+              : "Mostrando los accesos de las últimas 24 horas."}
 
           </p>
 
         </div>
+
+        <span
+          className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest ${
+            hayBusqueda
+              ? "bg-blue-500/20 text-blue-400"
+              : "bg-slate-700 text-slate-300"
+          }`}
+        >
+          {hayBusqueda ? "Historial completo" : "Últimas 24h"}
+        </span>
 
       </div>
 
@@ -108,7 +147,7 @@ const LoginLogs = () => {
 
           <h2 className="text-4xl font-bold mt-2">
 
-            {logs.length}
+            {logsFiltrados.length}
 
           </h2>
 
@@ -125,7 +164,7 @@ const LoginLogs = () => {
           <h2 className="text-4xl font-bold mt-2">
 
             {
-              logs.filter(
+              logsFiltrados.filter(
                 log => log.estado === "Exitoso"
               ).length
             }
@@ -145,7 +184,7 @@ const LoginLogs = () => {
           <h2 className="text-4xl font-bold mt-2">
 
             {
-              logs.filter(
+              logsFiltrados.filter(
                 log => log.estado !== "Exitoso"
               ).length
             }
@@ -165,7 +204,7 @@ const LoginLogs = () => {
           <h2 className="text-4xl font-bold mt-2">
 
             {
-              logs.filter(
+              logsFiltrados.filter(
                 log => log.estado === "Cuenta bloqueada"
               ).length
             }
@@ -206,6 +245,11 @@ const LoginLogs = () => {
           "
 
         />
+
+        <p className="text-slate-500 text-sm mt-2">
+          Al buscar por correo se muestra todo el historial, sin límite de 24 horas.
+        </p>
+
 </div>
       {/* ==========================
           TABLA
@@ -266,7 +310,8 @@ const LoginLogs = () => {
 
             <tr
               key={log.id}
-              className="border-t border-slate-700 hover:bg-slate-700 transition"
+              onClick={() => setLogSeleccionado(log)}
+              className="border-t border-slate-700 hover:bg-slate-700 transition cursor-pointer"
             >
 
               <td className="p-4 font-semibold">
@@ -284,13 +329,7 @@ const LoginLogs = () => {
               <td className="p-4 text-center">
 
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-bold ${
-                    log.estado === "Exitoso"
-                      ? "bg-green-500/20 text-green-400"
-                      : log.estado === "Cuenta bloqueada"
-                      ? "bg-yellow-500/20 text-yellow-400"
-                      : "bg-red-500/20 text-red-400"
-                  }`}
+                  className={`px-3 py-1 rounded-full text-xs font-bold ${estadoBadgeClass(log.estado)}`}
                 >
                   {log.estado}
                 </span>
@@ -313,7 +352,92 @@ const LoginLogs = () => {
 
   </div>
 
-</div> 
+</div>
+
+      {/* ==========================
+          MODAL DETALLE
+      ========================== */}
+
+      {logSeleccionado && (
+
+        <div
+          onClick={() => setLogSeleccionado(null)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+        >
+
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-lg p-8"
+          >
+
+            <div className="flex justify-between items-start mb-6">
+
+              <div>
+
+                <p className="text-blue-400 uppercase tracking-widest font-semibold text-sm">
+                  Detalle del acceso
+                </p>
+
+                <h2 className="text-2xl font-black mt-1">
+                  Registro #{logSeleccionado.id}
+                </h2>
+
+              </div>
+
+              <button
+                onClick={() => setLogSeleccionado(null)}
+                className="text-slate-400 hover:text-white transition text-2xl leading-none"
+                aria-label="Cerrar"
+              >
+                ×
+              </button>
+
+            </div>
+
+            <div className="space-y-4">
+
+              <div className="flex justify-between items-center border-b border-slate-700 pb-3">
+                <span className="text-slate-400">Estado</span>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-bold ${estadoBadgeClass(logSeleccionado.estado)}`}
+                >
+                  {logSeleccionado.estado}
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center border-b border-slate-700 pb-3">
+                <span className="text-slate-400">Correo</span>
+                <span className="font-semibold text-right">{logSeleccionado.correo}</span>
+              </div>
+
+              <div className="flex justify-between items-center border-b border-slate-700 pb-3">
+                <span className="text-slate-400">ID de usuario</span>
+                <span className="text-slate-300">{logSeleccionado.usuario_id ?? "—"}</span>
+              </div>
+
+              <div className="flex justify-between items-center border-b border-slate-700 pb-3">
+                <span className="text-slate-400">Dirección IP</span>
+                <span className="text-slate-300">{logSeleccionado.ip}</span>
+              </div>
+
+              <div className="border-b border-slate-700 pb-3">
+                <span className="text-slate-400 block mb-2">Navegador / User-Agent</span>
+                <span className="text-slate-300 text-sm break-words">{logSeleccionado.navegador}</span>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <span className="text-slate-400">Fecha</span>
+                <span className="text-slate-300">{formatearFecha(logSeleccionado.fecha)}</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
+
     </div>
 
   );

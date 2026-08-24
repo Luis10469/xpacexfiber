@@ -1,10 +1,25 @@
+import { useEffect, useRef, useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar/Sidebar.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import IdleTimer from '../components/security/IdleTimer.jsx';
+import { useNotificaciones } from '../hooks/useNotificaciones.js';
+import NotificationBell from '../components/Notificaciones/NotificationBell.jsx';
+import NuevasNoticiasModal from '../components/Notificaciones/NuevasNoticiasModal.jsx';
 
 const AdminLayout = () => {
   const { user, loading } = useAuth();
+  const notif = useNotificaciones();
+
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const yaMostrado = useRef(false);
+
+  useEffect(() => {
+    if (notif.noLeidas > 0 && !yaMostrado.current) {
+      yaMostrado.current = true;
+      setModalAbierto(true);
+    }
+  }, [notif.noLeidas]);
 
   if (loading) {
     return (
@@ -53,6 +68,25 @@ const AdminLayout = () => {
 
       {/* SEGURIDAD */}
       <IdleTimer />
+
+      {/* NOTIFICACIONES */}
+      <NotificationBell
+        notificaciones={notif.notificaciones}
+        noLeidas={notif.noLeidas}
+        marcarLeida={notif.marcarLeida}
+        marcarTodas={notif.marcarTodas}
+      />
+
+      <NuevasNoticiasModal
+        open={modalAbierto}
+        notificaciones={notif.notificaciones}
+        marcarLeida={notif.marcarLeida}
+        marcarTodas={() => {
+          notif.marcarTodas();
+          setModalAbierto(false);
+        }}
+        onClose={() => setModalAbierto(false)}
+      />
 
     </div>
   );

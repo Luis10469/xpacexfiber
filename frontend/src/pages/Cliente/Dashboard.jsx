@@ -1,21 +1,38 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../../services/api.js";
+import SpeedTest from "../../components/SpeedTest/SpeedTest.jsx";
 
 const Dashboard = () => {
   const [datos, setDatos] = useState(null);
 
+  const cargarDatos = useCallback(async () => {
+    try {
+      const { data } = await api.get("/clientes/mi-servicio");
+      setDatos(data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  // Carga inicial al montar, y revalidación controlada cuando el
+  // cliente vuelve a esta pestaña (por ejemplo, si el admin cambió
+  // el estado de su servicio en otra sesión mientras la tenía abierta).
+  // Un único listener, sin intervalos ni polling.
   useEffect(() => {
-    const cargarDatos = async () => {
-      try {
-        const { data } = await api.get("/clientes/mi-servicio");
-        setDatos(data);
-      } catch (err) {
-        console.error(err);
+    cargarDatos();
+
+    const alVolverVisible = () => {
+      if (document.visibilityState === "visible") {
+        cargarDatos();
       }
     };
 
-    cargarDatos();
-  }, []);
+    document.addEventListener("visibilitychange", alVolverVisible);
+
+    return () => {
+      document.removeEventListener("visibilitychange", alVolverVisible);
+    };
+  }, [cargarDatos]);
 
   if (!datos) {
     return (
@@ -31,7 +48,7 @@ const Dashboard = () => {
       {/* Encabezado */}
 
       <div>
-        <h1 className="text-4xl font-bold text-white">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white break-words">
           👋 Bienvenido, {datos.nombre}
         </h1>
 
@@ -105,6 +122,10 @@ const Dashboard = () => {
         </div>
 
       </div>
+
+      {/* Prueba de velocidad */}
+
+      <SpeedTest velocidadContratada={Number(datos.velocidad) || 0} />
 
     </div>
   );
