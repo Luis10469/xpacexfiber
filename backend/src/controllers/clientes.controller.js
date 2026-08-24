@@ -48,6 +48,16 @@ export const getClienteById = async (req, res) => {
 
   try {
 
+    const params = [id];
+    const filtroPropietario =
+      req.user.rol === "cliente"
+        ? " AND c.usuario_id = @param1"
+        : "";
+
+    if (filtroPropietario) {
+      params.push(req.user.id);
+    }
+
     const rows = await query(
       `
       SELECT
@@ -68,8 +78,9 @@ export const getClienteById = async (req, res) => {
       LEFT JOIN planes p ON c.plan_id = p.id
       LEFT JOIN zonas z ON c.zona_id = z.id
       WHERE c.id = @param0
+      ${filtroPropietario}
       `,
-      [id]
+      params
     );
 
     if (!rows.length) {
