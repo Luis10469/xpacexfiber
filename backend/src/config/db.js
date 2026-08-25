@@ -28,7 +28,7 @@ const construirConfig = () => {
 
       pool: {
         max: 10,
-        min: 0,
+        min: 1, // mantiene una conexión viva para evitar el reconnect (TLS) tras inactividad
         idleTimeoutMillis: 30000,
       },
 

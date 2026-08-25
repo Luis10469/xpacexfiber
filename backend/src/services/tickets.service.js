@@ -610,64 +610,68 @@ export const crearMensaje = async (
     );
   }
 
-  await query(
-    `
-      INSERT INTO ticket_mensajes
-      (
-        ticket_id,
-        usuario_id,
-        mensaje
-      )
-      VALUES
-      (
-        @param0,
-        @param1,
-        @param2
-      )
-    `,
-    [
-      ticketId,
-      usuario.id,
-      mensaje,
-    ]
-  );
+  const operaciones = [
+    query(
+      `
+        INSERT INTO ticket_mensajes
+        (
+          ticket_id,
+          usuario_id,
+          mensaje
+        )
+        VALUES
+        (
+          @param0,
+          @param1,
+          @param2
+        )
+      `,
+      [
+        ticketId,
+        usuario.id,
+        mensaje,
+      ]
+    ),
 
-  await query(
-    `
-      INSERT INTO ticket_historial
-      (
-        ticket_id,
-        usuario_id,
-        accion,
-        fecha
-      )
-      VALUES
-      (
-        @param0,
-        @param1,
-        'Nuevo mensaje',
-        GETDATE()
-      )
-    `,
-    [
-      ticketId,
-      usuario.id,
-    ]
-  );
+    query(
+      `
+        INSERT INTO ticket_historial
+        (
+          ticket_id,
+          usuario_id,
+          accion,
+          fecha
+        )
+        VALUES
+        (
+          @param0,
+          @param1,
+          'Nuevo mensaje',
+          GETDATE()
+        )
+      `,
+      [
+        ticketId,
+        usuario.id,
+      ]
+    ),
+  ];
 
   if (
     usuario.rol === "cliente" &&
     ticket.estado === "Respondido"
   ) {
-    await query(
-      `
-        UPDATE tickets
-        SET
-          estado = 'Pendiente',
-          fecha_actualizacion = GETDATE()
-        WHERE id = @param0
-      `,
-      [ticketId]
+    operaciones.push(
+      query(
+        `
+          UPDATE tickets
+          SET
+            estado = 'Pendiente',
+            fecha_actualizacion = GETDATE()
+          WHERE id = @param0
+        `,
+        [ticketId]
+      )
     );
   }
 
@@ -675,17 +679,24 @@ export const crearMensaje = async (
     ["admin", "tecnico"].includes(usuario.rol) &&
     !["Resuelto", "Cerrado"].includes(ticket.estado)
   ) {
-    await query(
-      `
-        UPDATE tickets
-        SET
-          estado = 'Respondido',
-          fecha_actualizacion = GETDATE()
-        WHERE id = @param0
-      `,
-      [ticketId]
+    operaciones.push(
+      query(
+        `
+          UPDATE tickets
+          SET
+            estado = 'Respondido',
+            fecha_actualizacion = GETDATE()
+          WHERE id = @param0
+        `,
+        [ticketId]
+      )
     );
   }
+
+  // Las operaciones son independientes entre sí (insertan/actualizan
+  // filas distintas), así que se ejecutan en paralelo para no sumar
+  // round-trips secuenciales hacia Azure.
+  await Promise.all(operaciones);
 
   return true;
 };

@@ -288,15 +288,18 @@ const useTickets = ({ modoAdmin = true } = {}) => {
         mensaje.trim()
       );
 
-      // Recargar conversación
-      await cargarMensajes(ticketId);
-      await cargarTickets();
-      await cargarDashboard();
-
-      if (ticketSeleccionado?.id === ticketId) {
-        const actualizado = await obtenerTicketPorId(ticketId);
-        setTicketSeleccionado(actualizado);
-      }
+      // Recargar conversación en paralelo, sin bloquear la UI
+      // (el input ya puede limpiarse apenas el mensaje quedó enviado).
+      Promise.all([
+        cargarMensajes(ticketId),
+        cargarTickets(),
+        cargarDashboard(),
+        ticketSeleccionado?.id === ticketId
+          ? obtenerTicketPorId(ticketId).then(setTicketSeleccionado)
+          : null,
+      ]).catch((error) =>
+        manejarError(error, "No se pudo actualizar la conversación.")
+      );
 
       return true;
     } catch (error) {

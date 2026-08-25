@@ -254,6 +254,14 @@ El sistema utiliza
 
 ---
 
+# 🚀 Despliegue
+
+Backend en Render y frontend en Vercel, con la base de datos en Azure SQL.
+Guía paso a paso, variables de entorno necesarias y checklist en
+[`docs/DEPLOY.md`](docs/DEPLOY.md).
+
+---
+
 # 🛠 Scripts
 
 Backend
