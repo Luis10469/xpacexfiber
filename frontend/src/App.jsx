@@ -24,6 +24,7 @@ import Zonas from './pages/admin/Zonas.jsx';
 import AdminTickets from './pages/admin/Tickets.jsx';
 import Noticias from './pages/admin/Noticias.jsx';
 import Reportes from './pages/admin/Reportes.jsx';
+import Facturacion from './pages/admin/Facturacion.jsx';
 import ForgotPassword from './pages/Login/ForgotPassword.jsx';
 import ResetPassword from './pages/Login/ResetPassword.jsx';
 function App() {
@@ -63,6 +64,7 @@ function App() {
             <Route path="usuarios" element={<Usuarios />} />
             <Route path="planes" element={<PlanesAdmin />} />
             <Route path="zonas" element={<Zonas />} />
+            <Route path="facturacion" element={<Facturacion />} />
             <Route path="tickets" element={<AdminTickets />} />
             <Route path="noticias" element={<Noticias />} />
             <Route path="reportes" element={<Reportes />} />

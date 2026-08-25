@@ -11,6 +11,7 @@ import zonasRoutes from "./routes/zonas.routes.js";
 import loginLogsRoutes from "./routes/loginLogs.routes.js";
 import noticiasRoutes from "./routes/noticias.routes.js";
 import reportesRoutes from "./routes/reportes.routes.js";
+import facturasRoutes from "./routes/facturas.routes.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/zonas", zonasRoutes);
 app.use("/api/login-logs", loginLogsRoutes);
 app.use("/api/noticias", noticiasRoutes);
 app.use("/api/reportes", reportesRoutes);
+app.use("/api/facturas", facturasRoutes);
 // Ruta raíz
 app.get('/', (req, res) => {
   res.json({ message: 'API Spacex-fiber funcionando ✅' });

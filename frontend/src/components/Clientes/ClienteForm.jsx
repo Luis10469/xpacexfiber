@@ -135,6 +135,39 @@ const ClienteForm = ({
         />
       </div>
 
+      {/* Día de facturación */}
+      <div>
+        <label className="block mb-2 font-semibold">
+          Día de facturación
+        </label>
+
+        <input
+          type="number"
+          min="1"
+          max="31"
+          placeholder="Ej. 1, 15, 24..."
+          value={formulario.dia_facturacion}
+          onChange={(e) => cambiar("dia_facturacion", e.target.value)}
+          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3"
+        />
+      </div>
+
+      {/* Días para vencimiento */}
+      <div>
+        <label className="block mb-2 font-semibold">
+          Días para vencimiento
+        </label>
+
+        <input
+          type="number"
+          min="0"
+          placeholder="Ej. 6"
+          value={formulario.dias_vencimiento}
+          onChange={(e) => cambiar("dias_vencimiento", e.target.value)}
+          className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3"
+        />
+      </div>
+
     </div>
   );
 };

@@ -32,6 +32,8 @@ const Clientes = () => {
     zona_id: "",
     direccion: "",
     estado: "activo",
+    dia_facturacion: "",
+    dias_vencimiento: "",
   });
 
   // ==========================
@@ -87,6 +89,8 @@ const Clientes = () => {
       zona_id: "",
       direccion: "",
       estado: "activo",
+      dia_facturacion: "",
+      dias_vencimiento: "",
     });
 
     setMostrarModal(true);
@@ -108,6 +112,8 @@ const Clientes = () => {
       direccion: cliente.direccion ?? "",
       estado: cliente.estado ?? "activo",
       fecha_instalacion: cliente.fecha_instalacion ?? "",
+      dia_facturacion: cliente.dia_facturacion ?? "",
+      dias_vencimiento: cliente.dias_vencimiento ?? "",
     });
 
     setMostrarModal(true);
@@ -142,6 +148,8 @@ const Clientes = () => {
         zona_id: "",
         direccion: "",
         estado: "activo",
+        dia_facturacion: "",
+        dias_vencimiento: "",
       });
 
       setClienteSeleccionado(null);

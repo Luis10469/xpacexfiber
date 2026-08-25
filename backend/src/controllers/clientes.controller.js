@@ -19,8 +19,11 @@ export const getClientes = async (req, res) => {
         c.direccion,
         c.estado,
         p.nombre AS nombre_plan,
+        p.precio AS precio_plan,
         z.nombre AS nombre_zona,
-        c.fecha_instalacion
+        c.fecha_instalacion,
+        c.dia_facturacion,
+        c.dias_vencimiento
       FROM clientes c
       INNER JOIN usuarios u ON c.usuario_id = u.id
       LEFT JOIN planes p ON c.plan_id = p.id
@@ -227,6 +230,8 @@ export const updateCliente = async (req, res) => {
     zona_id,
     direccion,
     estado,
+    dia_facturacion,
+    dias_vencimiento,
   } = req.body;
 
   try {
@@ -257,14 +262,18 @@ export const updateCliente = async (req, res) => {
         plan_id = @param0,
         zona_id = @param1,
         direccion = @param2,
-        estado = @param3
-      WHERE id = @param4
+        estado = @param3,
+        dia_facturacion = @param4,
+        dias_vencimiento = @param5
+      WHERE id = @param6
       `,
       [
         plan_id,
         zona_id,
         direccion,
         estado,
+        dia_facturacion || null,
+        dias_vencimiento || null,
         id,
       ]
     );

@@ -29,6 +29,7 @@ const Sidebar = ({ rol }) => {
     { path: '/admin/clientes', label: '👥 Clientes' },
     { path: '/admin/planes', label: '📡 Planes' },
     { path: '/admin/zonas', label: '📍 Zonas' },
+    { path: '/admin/facturacion', label: '💰 Facturación' },
     { path: '/admin/tickets', label: '🎫 Tickets' },
     { path: '/admin/login-logs', label: '🛡️ Historial de accesos' },
     { path: '/admin/noticias', label: '📰 Noticias' },
