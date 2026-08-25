@@ -19,8 +19,9 @@ const app = express();
 
 // Dominios permitidos para hacer peticiones al backend
 const allowedOrigins = [
-  'http://localhost:5173',            // desarrollo local (Vite)
-  'https://xpacexfiber.vercel.app',   // frontend en producción (ajustar cuando Vercel confirme el dominio final)
+  'http://localhost:5173',                       // desarrollo local (Vite)
+  'https://xpacexfiber-frontend.onrender.com',   // frontend en producción (Render)
+  'https://xpacexfiber.vercel.app',              // frontend en Vercel, si se usa ese despliegue
 ];
 
 app.use(cors({
