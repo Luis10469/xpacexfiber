@@ -17,11 +17,29 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+// Dominios permitidos para hacer peticiones al backend
+const allowedOrigins = [
+  'http://localhost:5173',            // desarrollo local (Vite)
+  'https://xpacexfiber.vercel.app',   // frontend en producción (ajustar cuando Vercel confirme el dominio final)
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Permite peticiones sin origin (Postman, apps móviles, curl) y las de la lista
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api/dashboard', dashboardRoutes);
+
 // Rutas
+app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/clientes', clientesRoutes);
 app.use('/api/planes', planesRoutes);
@@ -32,6 +50,7 @@ app.use("/api/login-logs", loginLogsRoutes);
 app.use("/api/noticias", noticiasRoutes);
 app.use("/api/reportes", reportesRoutes);
 app.use("/api/facturas", facturasRoutes);
+
 // Ruta raíz
 app.get('/', (req, res) => {
   res.json({ message: 'API Spacex-fiber funcionando ✅' });
