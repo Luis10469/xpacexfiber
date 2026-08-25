@@ -84,6 +84,21 @@ Este documento explica cómo publicar WiFiConnect (SpaceX Fiber) usando:
 4. Deploy. Vercel entrega una URL pública tipo
    `https://spacexfiber.vercel.app`.
 
+### Si el frontend se despliega como Static Site en Render (en vez de Vercel)
+
+Al recargar o entrar directo a una ruta como `/planes` o `/admin/dashboard`,
+Render busca ese archivo físico en `dist/` y devuelve `404 Not Found` — es una
+SPA con React Router, todas las rutas deben servir `index.html` y dejar que
+el router las resuelva en el navegador. Hay que agregar una regla de rewrite:
+
+- Panel del servicio (Static Site) → **Redirects/Rewrites** → agregar:
+  - **Source**: `/*`
+  - **Destination**: `/index.html`
+  - **Action**: `Rewrite`
+
+Sin esta regla, solo la ruta `/` funciona; cualquier otra ruta accedida
+directamente (o recargada con F5) da 404.
+
 ---
 
 ## 3. CORS
