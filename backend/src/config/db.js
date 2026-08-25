@@ -1,4 +1,3 @@
-import sql from "mssql/msnodesqlv8.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -6,27 +5,62 @@ dotenv.config();
 // ======================================
 // CONFIGURACIÓN SQL SERVER
 // ======================================
+// Modo local (por defecto): conexión de Windows (Trusted_Connection) vía
+// ODBC, igual que siempre. Requiere el driver nativo `msnodesqlv8`, que
+// solo funciona en Windows.
+//
+// Modo nube (DB_TRUSTED_CONNECTION=false, ej. Render/Railway sobre
+// Azure SQL Database): usuario/contraseña por TCP con el driver
+// estándar `mssql` (sin dependencias nativas), que sí corre en Linux.
+// El módulo nativo `msnodesqlv8` se importa de forma dinámica y solo en
+// el modo local, para que nunca se intente cargar en un contenedor
+// Linux donde no puede compilarse.
 
-const config = {
-  connectionString: [
-    "Driver={ODBC Driver 18 for SQL Server}",
-    `Server=${process.env.DB_HOST}`,
-    `Database=${process.env.DB_NAME}`,
-    "Trusted_Connection=Yes",
-    "Encrypt=No",
-    "TrustServerCertificate=Yes",
-  ].join(";"),
+const modoNube = process.env.DB_TRUSTED_CONNECTION === "false";
 
-  pool: {
-    max: 10,
-    min: 0,
-    idleTimeoutMillis: 30000,
-  },
+const construirConfig = () => {
+  if (modoNube) {
+    return {
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      server: process.env.DB_HOST,
+      database: process.env.DB_NAME,
 
-  options: {
-    trustedConnection: true,
-    useUTC: false,
-  },
+      pool: {
+        max: 10,
+        min: 0,
+        idleTimeoutMillis: 30000,
+      },
+
+      options: {
+        encrypt: true, // obligatorio en Azure SQL Database
+        trustServerCertificate: false,
+        useUTC: false,
+      },
+    };
+  }
+
+  return {
+    connectionString: [
+      "Driver={ODBC Driver 18 for SQL Server}",
+      `Server=${process.env.DB_HOST}`,
+      `Database=${process.env.DB_NAME}`,
+      "Trusted_Connection=Yes",
+      "Encrypt=No",
+      "TrustServerCertificate=Yes",
+    ].join(";"),
+
+    pool: {
+      max: 10,
+      min: 0,
+      idleTimeoutMillis: 30000,
+    },
+
+    options: {
+      trustedConnection: true,
+      useUTC: false,
+    },
+  };
 };
 
 // ======================================
@@ -45,11 +79,16 @@ export const connectDB = async () => {
       return pool;
     }
 
-    pool = await sql.connect(config);
+    const sql = modoNube
+      ? (await import("mssql")).default
+      : (await import("mssql/msnodesqlv8.js")).default;
+
+    pool = await sql.connect(construirConfig());
 
     console.log("✅ SQL Server conectado correctamente");
     console.log(`📦 Base de datos: ${process.env.DB_NAME}`);
     console.log(`🖥️ Servidor: ${process.env.DB_HOST}`);
+    console.log(`🌐 Modo: ${modoNube ? "nube (SQL auth)" : "local (Windows)"}`);
 
     return pool;
   } catch (error) {
