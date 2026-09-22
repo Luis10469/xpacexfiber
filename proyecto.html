@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Documentación del proyecto — SpaceFiber</title>
+<meta name="description" content="Backlog, sprint y tablero Kanban de la landing de SpaceFiber: cinco historias de usuario organizadas con Scrum.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#128225;</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="site-header">
+  <div class="wrap site-header__in">
+    <a class="logo" href="index.html" aria-label="SpaceFiber, ir al inicio">
+      <span class="logo__mark" aria-hidden="true">&#128225;</span>
+      <span class="logo__name">SpaceFiber</span>
+    </a>
+    <nav class="nav" id="main-nav" aria-label="Navegación principal">
+      <a class="nav__link" href="index.html">Inicio</a>
+      <a class="nav__link" href="#backlog">Backlog</a>
+      <a class="nav__link" href="#sprint">Sprint</a>
+      <a class="nav__link" href="#tablero">Tablero</a>
+    </nav>
+    <div class="header__actions">
+      <a class="btn btn--primary header__cta" href="index.html">Ver el sitio</a>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Cambiar tema">&#9728;</button>
+      <button class="icon-btn" id="menu-toggle" type="button" aria-label="Abrir menú" aria-controls="main-nav" aria-expanded="false">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <section class="section" id="backlog">
+    <div class="wrap">
+      <div class="section__head reveal">
+        <span class="kicker">Gestión del proyecto</span>
+        <h1 class="section__title" style="font-size:clamp(28px,5vw,40px)">Scrum: del backlog al tablero</h1>
+        <p class="sub">
+          La landing se entrega en un sprint de dos semanas. Esta página documenta el
+          Sprint 1 &mdash; Entrega Landing Page: las cinco historias comprometidas, que salen del
+          archivo backlog.json y están cargadas en el tablero de Jira del proyecto.
+        </p>
+      </div>
+
+      <div class="flow reveal" aria-label="Flujo de trabajo del equipo">
+        <span class="flow__step flow__step--on">Backlog</span>
+        <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+        <span class="flow__step flow__step--on">Sprint 1</span>
+        <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+        <span class="flow__step">To Do</span>
+        <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+        <span class="flow__step">Doing</span>
+        <span class="flow__arrow" aria-hidden="true">&rarr;</span>
+        <span class="flow__step">Done</span>
+      </div>
+
+      <h2 class="mt-6" style="font-size:20px">Product Backlog &middot; 5 historias de usuario</h2>
+      <p class="sub mt-4" style="margin-bottom:16px">
+        Historias priorizadas para el sprint, con sus criterios de aceptación en formato
+        Dado que / Cuando / Entonces.
+      </p>
+
+      <div class="grid grid--2 grid--stretch">
+        <article class="story reveal">
+          <div class="story__top">
+            <span class="tag tag--id">HU-01</span>
+            <span class="tag tag--alta">Prioridad alta</span>
+            <span class="tag">5 puntos</span>
+          </div>
+          <p class="story__text">
+            Como <em>visitante interesado en contratar</em>, quiero diligenciar un formulario que
+            valide mis datos mientras lo lleno para enviar mi solicitud sin errores.
+          </p>
+          <p class="story__label">Criterios de aceptación</p>
+          <ul class="story__criteria">
+            <li>Dado un campo vacío o mal escrito, cuando salgo de él, entonces veo debajo un mensaje en rojo con el error.</li>
+            <li>Dado que envío con errores o sin autorizar mis datos, entonces no se envía y el cursor va al primer error.</li>
+            <li>Dado que todo es válido, cuando envío, entonces veo &ldquo;Enviando...&rdquo; y luego la confirmación.</li>
+          </ul>
+        </article>
+
+        <article class="story reveal">
+          <div class="story__top">
+            <span class="tag tag--id">HU-02</span>
+            <span class="tag tag--alta">Prioridad alta</span>
+            <span class="tag">5 puntos</span>
+          </div>
+          <p class="story__text">
+            Como <em>visitante desde el celular</em>, quiero un encabezado con el logo y un menú que
+            se adapte a mi pantalla para moverme entre secciones sin hacer zoom.
+          </p>
+          <p class="story__label">Criterios de aceptación</p>
+          <ul class="story__criteria">
+            <li>Dado que bajo por la página, entonces el encabezado sigue visible y resalta la sección actual.</li>
+            <li>Dada una pantalla de 960 px o menos, cuando toco &#9776;, entonces se abre el menú y se cierra al elegir un enlace.</li>
+            <li>Dado un celular de 360 px, entonces no hay desplazamiento lateral y las tarjetas van en una columna.</li>
+          </ul>
+        </article>
+
+        <article class="story reveal">
+          <div class="story__top">
+            <span class="tag tag--id">HU-03</span>
+            <span class="tag tag--media">Prioridad media</span>
+            <span class="tag">2 puntos</span>
+          </div>
+          <p class="story__text">
+            Como <em>visitante con dudas</em>, quiero desplegar las preguntas frecuentes una por una
+            para encontrar respuestas sin salir de la página.
+          </p>
+          <p class="story__label">Criterios de aceptación</p>
+          <ul class="story__criteria">
+            <li>Dado que pulso una pregunta, entonces su respuesta se despliega con animación y el &ldquo;+&rdquo; gira.</li>
+            <li>Dado que hay una abierta, cuando abro otra, entonces la anterior se cierra.</li>
+            <li>Dado que uso el teclado, cuando pulso Enter o Espacio, entonces se abre o se cierra y se anuncia su estado.</li>
+          </ul>
+        </article>
+
+        <article class="story reveal">
+          <div class="story__top">
+            <span class="tag tag--id">HU-04</span>
+            <span class="tag tag--media">Prioridad media</span>
+            <span class="tag">3 puntos</span>
+          </div>
+          <p class="story__text">
+            Como <em>visitante que ya decidió contratar</em>, quiero botones de acción que me lleven
+            al formulario y me respondan visualmente para iniciar mi solicitud con un clic.
+          </p>
+          <p class="story__label">Criterios de aceptación</p>
+          <ul class="story__criteria">
+            <li>Dado que pulso &ldquo;Contratar&rdquo; o &ldquo;Comenzar ahora&rdquo;, entonces la página baja suavemente al formulario.</li>
+            <li>Dado que llegué desde un botón, entonces el formulario se resalta y el cursor queda en el primer campo pendiente.</li>
+            <li>Dado que pulsé &ldquo;Contratar Pro&rdquo;, entonces el plan ya viene seleccionado.</li>
+          </ul>
+        </article>
+
+        <article class="story reveal">
+          <div class="story__top">
+            <span class="tag tag--id">HU-05</span>
+            <span class="tag tag--alta">Prioridad alta</span>
+            <span class="tag">3 puntos</span>
+          </div>
+          <p class="story__text">
+            Como <em>equipo de desarrollo</em>, quiero la landing como sitio estático con
+            index.html, styles.css y script.js en la raíz para publicarla en GitHub Pages sin compilación.
+          </p>
+          <p class="story__label">Criterios de aceptación</p>
+          <ul class="story__criteria">
+            <li>Dado el repositorio con .nojekyll, cuando se activa Pages en main / raíz, entonces se publica tal cual.</li>
+            <li>Dado que Pages sirve el sitio en /&lt;repositorio&gt;/, entonces todo carga porque las rutas son relativas.</li>
+            <li>Dado el sitio publicado, entonces no hay errores de JavaScript ni recursos 404 en la consola.</li>
+          </ul>
+        </article>
+
+        <article class="card reveal" id="sprint" style="display:flex; flex-direction:column; justify-content:center">
+          <span class="badge">Sprint 1 &middot; 2 semanas</span>
+          <h3 class="card__title mt-4">Sprint 1 - Entrega Landing</h3>
+          <p class="card__text">
+            Objetivo: publicar la landing de SpaceFiber en GitHub Pages con el formulario validado,
+            la navegación responsive, las preguntas frecuentes y el llamado a la acción con feedback visual.
+          </p>
+          <ul class="card__list">
+            <li>5 historias comprometidas &middot; 18 puntos</li>
+            <li>Equipo: 3 desarrolladores + 1 QA</li>
+            <li>Ceremonias: daily, revisión y retrospectiva</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="tablero">
+    <div class="wrap">
+      <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center">
+        <h2 class="section__title" style="margin:0">Tablero del Sprint 1</h2>
+        <button class="btn btn--ghost" id="kanban-reset" type="button" style="margin-left:auto; padding:9px 16px; font-size:13.5px">
+          Restablecer tablero
+        </button>
+      </div>
+      <p class="sub mt-4" style="margin-bottom:16px">
+        Al iniciar el sprint las cinco historias arrancan en To Do. Usa las flechas de cada tarjeta
+        para moverlas entre columnas; el estado queda guardado en tu navegador.
+      </p>
+
+      <div class="board" id="kanban">
+        <section class="column column--todo" data-column="todo" aria-label="Columna To Do">
+          <header class="column__head">
+            <span class="column__dot" aria-hidden="true"></span>
+            <h3 class="column__title">To Do</h3>
+            <span class="column__count">0</span>
+          </header>
+          <ul class="column__list">
+            <li class="column__empty">Sin historias en esta columna.</li>
+            <li class="ticket" data-id="HU-01" data-home="todo">
+              <div class="ticket__top">
+                <span class="tag tag--id">HU-01</span>
+                <span class="tag tag--alta">Alta</span>
+              </div>
+              <p class="ticket__title">Formulario de conversión con validación de campos</p>
+              <p class="ticket__meta">5 puntos &middot; Formulario y validaciones</p>
+              <div class="ticket__actions">
+                <button class="ticket__move" type="button" data-move="back" aria-label="Mover HU-01 a la columna anterior">&larr;</button>
+                <button class="ticket__move" type="button" data-move="next" aria-label="Mover HU-01 a la columna siguiente">&rarr;</button>
+              </div>
+            </li>
+            <li class="ticket" data-id="HU-02" data-home="todo">
+              <div class="ticket__top">
+                <span class="tag tag--id">HU-02</span>
+                <span class="tag tag--alta">Alta</span>
+              </div>
+              <p class="ticket__title">Encabezado interactivo, navegación y diseño responsive</p>
+              <p class="ticket__meta">5 puntos &middot; Mobile-first</p>
+              <div class="ticket__actions">
+                <button class="ticket__move" type="button" data-move="back" aria-label="Mover HU-02 a la columna anterior">&larr;</button>
+                <button class="ticket__move" type="button" data-move="next" aria-label="Mover HU-02 a la columna siguiente">&rarr;</button>
+              </div>
+            </li>
+            <li class="ticket" data-id="HU-03" data-home="todo">
+              <div class="ticket__top">
+                <span class="tag tag--id">HU-03</span>
+                <span class="tag tag--media">Media</span>
+              </div>
+              <p class="ticket__title">Preguntas frecuentes en acordeón interactivo</p>
+              <p class="ticket__meta">2 puntos &middot; Accesible con teclado</p>
+              <div class="ticket__actions">
+                <button class="ticket__move" type="button" data-move="back" aria-label="Mover HU-03 a la columna anterior">&larr;</button>
+                <button class="ticket__move" type="button" data-move="next" aria-label="Mover HU-03 a la columna siguiente">&rarr;</button>
+              </div>
+            </li>
+            <li class="ticket" data-id="HU-04" data-home="todo">
+              <div class="ticket__top">
+                <span class="tag tag--id">HU-04</span>
+                <span class="tag tag--media">Media</span>
+              </div>
+              <p class="ticket__title">Llamado a la acción principal con feedback visual</p>
+              <p class="ticket__meta">3 puntos &middot; Conversión</p>
+              <div class="ticket__actions">
+                <button class="ticket__move" type="button" data-move="back" aria-label="Mover HU-04 a la columna anterior">&larr;</button>
+                <button class="ticket__move" type="button" data-move="next" aria-label="Mover HU-04 a la columna siguiente">&rarr;</button>
+              </div>
+            </li>
+            <li class="ticket" data-id="HU-05" data-home="todo">
+              <div class="ticket__top">
+                <span class="tag tag--id">HU-05</span>
+                <span class="tag tag--alta">Alta</span>
+              </div>
+              <p class="ticket__title">Assets estáticos y despliegue en GitHub Pages</p>
+              <p class="ticket__meta">3 puntos &middot; Despliegue</p>
+              <div class="ticket__actions">
+                <button class="ticket__move" type="button" data-move="back" aria-label="Mover HU-05 a la columna anterior">&larr;</button>
+                <button class="ticket__move" type="button" data-move="next" aria-label="Mover HU-05 a la columna siguiente">&rarr;</button>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section class="column column--doing" data-column="doing" aria-label="Columna Doing">
+          <header class="column__head">
+            <span class="column__dot" aria-hidden="true"></span>
+            <h3 class="column__title">Doing</h3>
+            <span class="column__count">0</span>
+          </header>
+          <ul class="column__list">
+            <li class="column__empty">Sin historias en esta columna.</li>
+          </ul>
+        </section>
+
+        <section class="column column--done" data-column="done" aria-label="Columna Done">
+          <header class="column__head">
+            <span class="column__dot" aria-hidden="true"></span>
+            <h3 class="column__title">Done</h3>
+            <span class="column__count">0</span>
+          </header>
+          <ul class="column__list">
+            <li class="column__empty">Sin historias en esta columna.</li>
+          </ul>
+        </section>
+      </div>
+
+      <p class="mt-6"><a class="btn btn--ghost" href="index.html">Volver al sitio</a></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer__bottom" style="margin-top:0; border-top:0">
+    <span>&copy; 2026 SpaceFiber &middot; Sitio de demostración de un proyecto formativo.</span>
+    <div class="footer__legal">
+      <a href="politica-de-privacidad.html">Política de privacidad</a>
+      <a href="terminos-y-condiciones.html">Términos y condiciones</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
